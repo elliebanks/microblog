@@ -1,99 +1,124 @@
-2021-12-15 12:52:43,435 ERROR: Exception on / [GET] [in /home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py:1457]
+2021-12-22 10:19:35,488 ERROR: Exception on / [GET] [in /home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py:1457]
+Traceback (most recent call last):
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/clsregistry.py", line 408, in __call__
+    x = eval(self.arg, globals(), self._dict)
+  File "<string>", line 1, in <module>
+NameError: name 'Message' is not defined
+
+The above exception was the direct cause of the following exception:
+
 Traceback (most recent call last):
   File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
     response = self.full_dispatch_request()
   File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
     rv = self.handle_user_exception(e)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_login/utils.py", line 272, in decorated_view
-    return func(*args, **kwargs)
-  File "/home/ebanks/workspace/microblog/app/routes.py", line 32, in index
-    return render_template('index.html', title="Home", form=form, posts=posts)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/templating.py", line 147, in render_template
-    return _render(
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/templating.py", line 128, in _render
-    rv = template.render(context)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 1291, in render
-    self.environment.handle_exception()
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 925, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "/home/ebanks/workspace/microblog/app/templates/index.html", line 1, in top-level template code
-    {% extends "base.html" %}
-  File "/home/ebanks/workspace/microblog/app/templates/base.html", line 32, in top-level template code
-    {% block content %}{% endblock %}
-  File "/home/ebanks/workspace/microblog/app/templates/index.html", line 19, in block 'content'
-    {% include "_post.html" %}
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 925, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "/home/ebanks/workspace/microblog/app/templates/_post.html", line 7, in template
-    <a href="{{ url_for('user, username=post.author.username) }}">
-jinja2.exceptions.TemplateSyntaxError: unexpected char "'" at 184
-2021-12-15 12:52:47,518 ERROR: Exception on / [GET] [in /home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py:1457]
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1514, in full_dispatch_request
+    rv = self.preprocess_request()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1857, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+  File "/home/ebanks/workspace/microblog/app/main/routes.py", line 16, in before_request
+    if current_user.is_authenticated:
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/werkzeug/local.py", line 432, in __get__
+    obj = instance._get_current_object()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/werkzeug/local.py", line 554, in _get_current_object
+    return self.__local()  # type: ignore
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_login/utils.py", line 26, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_login/utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_login/login_manager.py", line 318, in _load_user
+    user = self._user_callback(user_id)
+  File "/home/ebanks/workspace/microblog/app/models.py", line 208, in load_user
+    return User.query.get(int(id))
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_sqlalchemy/__init__.py", line 550, in __get__
+    mapper = orm.class_mapper(type)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/base.py", line 442, in class_mapper
+    mapper = _inspect_mapped_class(class_, configure=configure)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/base.py", line 421, in _inspect_mapped_class
+    mapper._check_configure()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/mapper.py", line 1916, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/mapper.py", line 3429, in _configure_registries
+    _do_configure_registries(registries, cascade)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/mapper.py", line 3468, in _do_configure_registries
+    mapper._post_configure_properties()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/mapper.py", line 1933, in _post_configure_properties
+    prop.init()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/interfaces.py", line 231, in init
+    self.do_init()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/relationships.py", line 2150, in do_init
+    self._process_dependent_arguments()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/relationships.py", line 2190, in _process_dependent_arguments
+    self._clsregistry_resolve_arg(
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/clsregistry.py", line 415, in __call__
+    self._raise_for_name(n.args[0], n)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/clsregistry.py", line 375, in _raise_for_name
+    util.raise_(
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+sqlalchemy.exc.InvalidRequestError: When initializing mapper mapped class User->user, expression 'Message.sender_id' failed to locate a name ("name 'Message' is not defined"). If this is a class name, consider adding this relationship() to the <class 'app.models.User'> class after both dependent classes have been defined.
+2021-12-22 10:20:23,297 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:85]
+2021-12-22 10:20:34,870 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:85]
+2021-12-22 10:20:45,425 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:85]
+2021-12-22 10:21:02,525 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:85]
+2021-12-22 10:21:38,123 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:85]
+2021-12-22 10:21:43,031 ERROR: Exception on / [GET] [in /home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py:1457]
+Traceback (most recent call last):
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/clsregistry.py", line 408, in __call__
+    x = eval(self.arg, globals(), self._dict)
+  File "<string>", line 1, in <module>
+NameError: name 'Message' is not defined
+
+The above exception was the direct cause of the following exception:
+
 Traceback (most recent call last):
   File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
     response = self.full_dispatch_request()
   File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
     rv = self.handle_user_exception(e)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_login/utils.py", line 272, in decorated_view
-    return func(*args, **kwargs)
-  File "/home/ebanks/workspace/microblog/app/routes.py", line 32, in index
-    return render_template('index.html', title="Home", form=form, posts=posts)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/templating.py", line 147, in render_template
-    return _render(
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/templating.py", line 128, in _render
-    rv = template.render(context)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 1291, in render
-    self.environment.handle_exception()
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 925, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "/home/ebanks/workspace/microblog/app/templates/index.html", line 1, in top-level template code
-    {% extends "base.html" %}
-  File "/home/ebanks/workspace/microblog/app/templates/base.html", line 32, in top-level template code
-    {% block content %}{% endblock %}
-  File "/home/ebanks/workspace/microblog/app/templates/index.html", line 19, in block 'content'
-    {% include "_post.html" %}
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 925, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "/home/ebanks/workspace/microblog/app/templates/_post.html", line 7, in template
-    <a href="{{ url_for('user, username=post.author.username) }}">
-jinja2.exceptions.TemplateSyntaxError: unexpected char "'" at 184
-2021-12-15 12:52:50,447 ERROR: Exception on /explore [GET] [in /home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py:1457]
-Traceback (most recent call last):
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_login/utils.py", line 272, in decorated_view
-    return func(*args, **kwargs)
-  File "/home/ebanks/workspace/microblog/app/routes.py", line 39, in explore
-    return render_template('index.html', title="Explore", posts=posts)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/templating.py", line 147, in render_template
-    return _render(
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/templating.py", line 128, in _render
-    rv = template.render(context)
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 1291, in render
-    self.environment.handle_exception()
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 925, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "/home/ebanks/workspace/microblog/app/templates/index.html", line 1, in top-level template code
-    {% extends "base.html" %}
-  File "/home/ebanks/workspace/microblog/app/templates/base.html", line 32, in top-level template code
-    {% block content %}{% endblock %}
-  File "/home/ebanks/workspace/microblog/app/templates/index.html", line 19, in block 'content'
-    {% include "_post.html" %}
-  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 925, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File "/home/ebanks/workspace/microblog/app/templates/_post.html", line 7, in template
-    <a href="{{ url_for('user, username=post.author.username) }}">
-jinja2.exceptions.TemplateSyntaxError: unexpected char "'" at 184
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1514, in full_dispatch_request
+    rv = self.preprocess_request()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1857, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+  File "/home/ebanks/workspace/microblog/app/main/routes.py", line 16, in before_request
+    if current_user.is_authenticated:
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/werkzeug/local.py", line 432, in __get__
+    obj = instance._get_current_object()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/werkzeug/local.py", line 554, in _get_current_object
+    return self.__local()  # type: ignore
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_login/utils.py", line 26, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_login/utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_login/login_manager.py", line 318, in _load_user
+    user = self._user_callback(user_id)
+  File "/home/ebanks/workspace/microblog/app/models.py", line 208, in load_user
+    return User.query.get(int(id))
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_sqlalchemy/__init__.py", line 550, in __get__
+    mapper = orm.class_mapper(type)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/base.py", line 442, in class_mapper
+    mapper = _inspect_mapped_class(class_, configure=configure)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/base.py", line 421, in _inspect_mapped_class
+    mapper._check_configure()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/mapper.py", line 1916, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/mapper.py", line 3429, in _configure_registries
+    _do_configure_registries(registries, cascade)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/mapper.py", line 3468, in _do_configure_registries
+    mapper._post_configure_properties()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/mapper.py", line 1933, in _post_configure_properties
+    prop.init()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/interfaces.py", line 231, in init
+    self.do_init()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/relationships.py", line 2150, in do_init
+    self._process_dependent_arguments()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/relationships.py", line 2190, in _process_dependent_arguments
+    self._clsregistry_resolve_arg(
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/clsregistry.py", line 415, in __call__
+    self._raise_for_name(n.args[0], n)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/orm/clsregistry.py", line 375, in _raise_for_name
+    util.raise_(
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+sqlalchemy.exc.InvalidRequestError: When initializing mapper mapped class User->user, expression 'Message.sender_id' failed to locate a name ("name 'Message' is not defined"). If this is a class name, consider adding this relationship() to the <class 'app.models.User'> class after both dependent classes have been defined.
+2021-12-22 10:22:55,865 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:85]

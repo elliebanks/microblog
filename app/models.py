@@ -1,28 +1,26 @@
 import base64
-import os
 from datetime import datetime, timedelta
 from hashlib import md5
+import json
+import os
 from time import time
 from flask import current_app, url_for
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
+import redis
+import rq
 from app import db, login
+# from app.search import add_to_index, remove_from_index, query_index
+
 
 class PaginatedAPIMixin(object):
     @staticmethod
-    # the to_collection_dict method produces a dictionary with the
-    # user collection representation including the items, _meta, and _links
     def to_collection_dict(query, page, per_page, endpoint, **kwargs):
-        # first 3 arguments are a Flask-SQLAlchemy query object, page #, page size
-        # these arguments will determine what items are going to be returned
         resources = query.paginate(page, per_page, False)
-        # paginate() method of the query object used to obtain a page worth of items
-        # page and per_page query string arguments are given explicitly
-        # because they control pagination for all API routes
         data = {
             'items': [item.to_dict() for item in resources.items],
-            'meta': {
+            '_meta': {
                 'page': page,
                 'per_page': per_page,
                 'total_pages': resources.pages,
@@ -120,32 +118,33 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
             return
         return User.query.get(id)
 
-    # def new_messages(self):
-    #     last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
-    #     return Message.query.filter_by(recipient=self).filter(
-    #         Message.timestamp > last_read_time).count()
-    #
-    # def add_notification(self, name, data):
-    #     self.notifications.filter_by(name=name).delete()
-    #     n = Notification(name=name, payload_json=json.dumps(data), user=self)
-    #     db.session.add(n)
-    #     return n
-    # def launch_task(self, name, description, *args, **kwargs):
-    #     rq_job = current_app.task_queue.enqueue('app.tasks.' + name, self.id,
-    #                                             *args, **kwargs)
-    #     task = Task(id=rq_job.get_id(), name=name, description=description,
-    #                 user=self)
-    #     db.session.add(task)
-    #     return task
-    # def get_tasks_in_progress(self):
-    #     return Task.query.filter_by(user=self, complete=False).all()
-    # def get_task_in_progress(self, name):
-    #     return Task.query.filter_by(name=name, user=self,
-    #                                 complete=False).first()
+    def new_messages(self):
+        last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
+        return Message.query.filter_by(recipient=self).filter(
+            Message.timestamp > last_read_time).count()
+
+    def add_notification(self, name, data):
+        self.notifications.filter_by(name=name).delete()
+        n = Notification(name=name, payload_json=json.dumps(data), user=self)
+        db.session.add(n)
+        return n
+
+    def launch_task(self, name, description, *args, **kwargs):
+        rq_job = current_app.task_queue.enqueue('app.tasks.' + name, self.id,
+                                                *args, **kwargs)
+        task = Task(id=rq_job.get_id(), name=name, description=description,
+                    user=self)
+        db.session.add(task)
+        return task
+
+    def get_tasks_in_progress(self):
+        return Task.query.filter_by(user=self, complete=False).all()
+
+    def get_task_in_progress(self, name):
+        return Task.query.filter_by(name=name, user=self,
+                                    complete=False).first()
 
     def to_dict(self, include_email=False):
-    # to_dict method converts a user object to a Python representation,
-    # which will then be converted to JSON
         data = {
             'id': self.id,
             'username': self.username,
@@ -164,30 +163,18 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
         if include_email:
             data['email'] = self.email
         return data
-    # email field only used when the user requests their own data
 
-
-    # from_dict method achieves conversion from Python dictionary to a model:
     def from_dict(self, data, new_user=False):
-    # from_dict method is the reverse direction of to_dict method
-    # the client passes a user representation in a request and the
-    # server needs to parse and convert it to a User object
         for field in ['username', 'email', 'about_me']:
             if field in data:
                 setattr(self, field, data[field])
-            if new_user and 'password' in data:
-                # new_user argument determines if this is a new user registration
-                # which means password is included
-                self.set_password(data['password'])
-                # set_password() method creates the password hash
+        if new_user and 'password' in data:
+            self.set_password(data['password'])
 
     def get_token(self, expires_in=3600):
-        # get_token method returns a token for the user
         now = datetime.utcnow()
         if self.token and self.token_expiration > now + timedelta(seconds=60):
             return self.token
-        # method checks to see if a token is currently assigned with at least a minute left
-        # before expiration, which would then return the existing token
         self.token = base64.b64encode(os.urandom(24)).decode('utf-8')
         self.token_expiration = now + timedelta(seconds=expires_in)
         db.session.add(self)
@@ -203,12 +190,14 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
             return None
         return user
 
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
 
 class Post(db.Model):
+    __searchable__ = ['body']
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -218,42 +207,43 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post {}>'.format(self.body)
 
-# class Message(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-#     recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-#     body = db.Column(db.String(140))
-#     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-#
-#     def __repr__(self):
-#         return '<Message {}>'.format(self.body)
-#
-#
-# class Notification(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(128), index=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-#     timestamp = db.Column(db.Float, index=True, default=time)
-#     payload_json = db.Column(db.Text)
-#
-#     def get_data(self):
-#         return json.loads(str(self.payload_json))
-#
-#
-# class Task(db.Model):
-#     id = db.Column(db.String(36), primary_key=True)
-#     name = db.Column(db.String(128), index=True)
-#     description = db.Column(db.String(128))
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-#     complete = db.Column(db.Boolean, default=False)
-#
-#     def get_rq_job(self):
-#         try:
-#             rq_job = rq.job.Job.fetch(self.id, connection=current_app.redis)
-#         except (redis.exceptions.RedisError, rq.exceptions.NoSuchJobError):
-#             return None
-#         return rq_job
-#
-#     def get_progress(self):
-#         job = self.get_rq_job()
-#         return job.meta.get('progress', 0) if job is not None else 100
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Message {}>'.format(self.body)
+
+
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    timestamp = db.Column(db.Float, index=True, default=time)
+    payload_json = db.Column(db.Text)
+
+    def get_data(self):
+        return json.loads(str(self.payload_json))
+
+
+class Task(db.Model):
+    id = db.Column(db.String(36), primary_key=True)
+    name = db.Column(db.String(128), index=True)
+    description = db.Column(db.String(128))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    complete = db.Column(db.Boolean, default=False)
+
+    def get_rq_job(self):
+        try:
+            rq_job = rq.job.Job.fetch(self.id, connection=current_app.redis)
+        except (redis.exceptions.RedisError, rq.exceptions.NoSuchJobError):
+            return None
+        return rq_job
+
+    def get_progress(self):
+        job = self.get_rq_job()
+        return job.meta.get('progress', 0) if job is not None else 100

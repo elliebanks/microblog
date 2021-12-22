@@ -1,0 +1,108 @@
+2021-12-15 12:52:51,347 ERROR: Exception on /index [GET] [in /home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py:1457]
+Traceback (most recent call last):
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask_login/utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "/home/ebanks/workspace/microblog/app/routes.py", line 32, in index
+    return render_template('index.html', title="Home", form=form, posts=posts)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/templating.py", line 147, in render_template
+    return _render(
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/flask/templating.py", line 128, in _render
+    rv = template.render(context)
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 1291, in render
+    self.environment.handle_exception()
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 925, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/ebanks/workspace/microblog/app/templates/index.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "/home/ebanks/workspace/microblog/app/templates/base.html", line 32, in top-level template code
+    {% block content %}{% endblock %}
+  File "/home/ebanks/workspace/microblog/app/templates/index.html", line 19, in block 'content'
+    {% include "_post.html" %}
+  File "/home/ebanks/workspace/microblog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 925, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/ebanks/workspace/microblog/app/templates/_post.html", line 7, in template
+    <a href="{{ url_for('user, username=post.author.username) }}">
+jinja2.exceptions.TemplateSyntaxError: unexpected char "'" at 184
+2021-12-15 12:54:08,974 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:50]
+2021-12-15 15:11:01,709 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:50]
+2021-12-15 15:24:18,699 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:50]
+2021-12-15 15:25:04,996 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:50]
+2021-12-15 15:26:22,076 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:50]
+2021-12-15 15:27:51,225 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:50]
+2021-12-15 15:50:39,624 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:50]
+2021-12-15 15:52:59,218 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:50]
+2021-12-16 09:15:44,330 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 10:45:38,872 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 10:53:51,164 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 10:53:54,155 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 10:55:20,769 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 11:47:08,249 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 11:50:07,376 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 11:50:38,355 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 11:54:21,073 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 11:54:38,678 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 11:55:15,462 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 11:55:27,831 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 11:55:51,265 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 12:07:53,413 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 12:17:24,958 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 12:29:19,020 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 12:33:37,433 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 14:28:48,156 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 14:30:09,772 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 14:57:48,400 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 14:57:51,504 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 14:58:44,039 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 15:00:09,232 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 15:00:45,144 ERROR: Exception on /reset_password_request [POST] [in /usr/local/lib/python3.8/dist-packages/flask/app.py:1457]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python3.8/dist-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python3.8/dist-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python3.8/dist-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ebanks/workspace/microblog/app/routes.py", line 107, in reset_password_request
+    send_password_reset_email(user)
+NameError: name 'send_password_reset_email' is not defined
+2021-12-16 15:01:18,267 ERROR: Exception on /reset_password_request [POST] [in /usr/local/lib/python3.8/dist-packages/flask/app.py:1457]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python3.8/dist-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python3.8/dist-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python3.8/dist-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ebanks/workspace/microblog/app/routes.py", line 107, in reset_password_request
+    send_password_reset_email(user)
+NameError: name 'send_password_reset_email' is not defined
+2021-12-16 15:17:09,933 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 15:37:38,590 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 15:38:06,165 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 15:40:49,018 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 15:46:58,223 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 15:59:16,844 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 16:00:59,450 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 16:22:11,079 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 16:26:23,429 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 16:26:29,735 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 16:30:17,752 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 16:35:46,818 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 16:38:46,054 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 16:38:57,435 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 16:43:07,011 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 16:44:08,708 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-16 16:52:30,295 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:52]
+2021-12-17 11:52:41,208 INFO: Microblog startup [in /home/ebanks/workspace/microblog/app/__init__.py:54]
